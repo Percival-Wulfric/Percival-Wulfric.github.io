@@ -5,9 +5,11 @@
 // This will make randomly genrated terrain
 
 // Globle Variable's
-let rectangle_width = 2;
+let rectangle_width = 1;
 let ogStartTime, startTime;
-let peak_x, peak_y;
+let peakX, peak_y;
+let offset = 0;
+let avrageHeght = 0;
 
 
 function setup() {
@@ -39,23 +41,35 @@ function drawFlag(x, y){
 function generateTerrain(){
   // w → is the width of the rectangles
   // This function will genrate terain
-  peak_x = 0;
+
+  // All the heights used
+  let heights = 0;
+  let numRect = 1;
+
+  // Find peak + record peak
+  peakX = 0;
   peak_y = 0;
 
-  startTime = ogStartTime;
+  startTime = ogStartTime + offset;
   let rectHeight = 0;
   let timeChange = 0.01;
 
-  for (let x = 0; x + rectangle_width < width; x += rectangle_width){
+  for (let x = 0; x < width; x += rectangle_width){
     // This loop makes each rectangle
     rectHeight = map(noise(startTime), 0, 1, 0, height*0.95);
     if (peak_y < rectHeight){
       peak_y = rectHeight;
-      peak_x = x;
+      peakX = x;
     }
     rect(x, height, rectangle_width, rectHeight*-1);
     startTime += timeChange;
+
+    heights += rectHeight;
+    numRect++;
+    
   }
+
+  avrageHeght = heights/numRect
 
   
 }
@@ -64,6 +78,8 @@ function draw() {
   background(220);
   generateTerrain();
   fill(255,0,0);
-  drawFlag(peak_x, height - peak_y - 30);
+  drawFlag(peakX, height - peak_y - 30);
   fill(0);
+  offset += 0.01;
+  line()
 }

@@ -14,7 +14,7 @@ function setup() {
   for(let i = 0; i<NUM_SEGMENTS; i++){
     posList.push({x:x, y:y, r:frameCount});
   }
-  
+  stroke(195,60,84);
 }
 
 function renderSnake(){
@@ -24,7 +24,7 @@ function renderSnake(){
     // temporary translations so that tehy dont stack on top of each other
     translate(p.x, p.y);
     rotate(p.r);
-    fill(138, 196, 255);
+    fill(210, 110, 73);
     square(0,0,120);
     pop();
     p.r += 2;
@@ -45,7 +45,7 @@ function move(){
 }
 
 function draw() {
-  background(141, 228, 255);
+  background(255, 243, 176);
   renderSnake();
   move();
 }

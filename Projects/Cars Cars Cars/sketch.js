@@ -2,12 +2,6 @@
 // Muhammad Ismail
 // 2026-03-28
 
-// Vehical class to do
-// loop the vehical in move
-// the van and car modles
-// directional driving
-
-
 
 // Globles
 const LINEDASHVAL = 30;
@@ -46,8 +40,7 @@ class Vehicle{
     this.color = [random(255),random(255),random(255)];
     this.x = x; this.y = y;
     this.direction = Math.floor(random(2));
-    this.xSpeed = Math.floor(random(MAXSPEED));
-    if (this.direction === 0) this.xSpeed * -1;
+    this.xSpeed = Math.floor(random(1,MAXSPEED));
 
   }
 
@@ -61,12 +54,25 @@ class Vehicle{
 
     if(this.type === 0){
       // Car 
-      rect(this.x, this.y, 20, 25);
+
+      rect(this.x, this.y, 35, 15);
+
+      // Weels
+      fill(255)
+      rect(this.x, this.y -2, 8, 3);
+      rect(this.x + 27, this.y -2, 8, 3);
+      rect(this.x, this.y +15, 8, 3);
+      rect(this.x + 27, this.y + 15, 8, 3);
+
+
     }
 
     else{
       // Truck / Van
-      circle(this.x, this.y, 25);
+      noStroke();
+  
+      rect(this.x,this.y, 30, 25);
+      rect(this.x+ 32, this.y, 10, 25);
     }
   }
 
@@ -74,42 +80,26 @@ class Vehicle{
     if(this.direction === 0){
       // Moving Right to Left
       this.x -= this.xSpeed;
+      if(this.x < 0) this.x = width;
     }
 
     else{
       // Moving Left to Right
       this.x += this.xSpeed;
+      if(this.x > width) this.x = 0;
     }
   }
 
   speedUp(){
-    if(this.direction === 0){
-      // Moving Right to Left
-      this.xSpeed -= 1;
-      if(this.xSpeed < -15) this.xSpeed = -15;
-
-    }
-
-    else{
-      // Moving Left to Right
-      this.xSpeed += 1;
-      if(this.xSpeed > 15) this.xSpeed = 15;
-    }
+    // This makes that car speed up buy 1 to a max of 15
+    this.xSpeed += 1;
+    if(this.xSpeed > 15) this.xSpeed = 15;
   }
 
   speedDown(){
-    if(this.direction === 0){
-      // Moving Right to Left
-      this.xSpeed += 1;
-      if(this.xSpeed > -1) this.xSpeed = -1;
-
-    }
-
-    else{
-      // Moving Left to Right
-      this.xSpeed -= 1;
-      if(this.xSpeed < 1) this.xSpeed = 1;
-    }   
+    // This makes the car slow down to a max of 1
+    this.xSpeed -= 1;
+    if(this.xSpeed < 1) this.xSpeed = 1;
   }
 
   changeColor(){
@@ -119,11 +109,15 @@ class Vehicle{
   action(){
     this.display();
     this.move();
+
+    // Random Number
+    r = int(random(101));
+    if(r === 1 || r === 2 || r === 3) console.log(r);
     
     // Speed up or Speed down
     if(r === 1) this.speedUp();
     else if (r === 2) this.speedDown();
-
+    else if (r === 3) this.changeColor();
   }
 
 
@@ -131,9 +125,6 @@ class Vehicle{
 
 function draw() {
   background(255);
-  r = int(random(101));
-  if(r === 1) console.log(r);
-  
   drawRoad();
   x.action();
   

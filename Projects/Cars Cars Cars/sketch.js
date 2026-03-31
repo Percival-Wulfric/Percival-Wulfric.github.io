@@ -165,6 +165,17 @@ class Vehicle{
 
 }
 
+class TraffickLight{
+  // Consttuctor
+
+  constructor(x, y, state){
+    this.state = state;
+    this.x = x; this.y = y;
+  }
+
+
+}
+
 function draw() {
   background(255);
   drawRoad();

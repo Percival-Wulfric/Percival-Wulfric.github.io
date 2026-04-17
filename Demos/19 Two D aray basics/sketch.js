@@ -6,38 +6,49 @@
 // grid is 6 x 5
 
 // Global Varables
-let grid = [
-  [0  ,   0,   0, 255,  0 , 255], 
-  [255,   0, 255,   0, 255,   0],
-  [0  ,   0,   0,   0,   0, 255],
-  [255, 255, 255, 255, 255,   0],
-  [0  , 255,   0,   0,   0, 255]
-]
-let rows = grid.length;
-let cols = grid[0].length;
+let grid = [];
+let rows = 5; // chuse a random number of rows
+let cols = 6; // chouse a random number of cols
 let tileSize = 150;
 let winStatus;
 let slectType = 0; // 0 → crows, 1 → box
 
-function makeGrid(){
+
+function makeGrid(grid){
   // this function will make a random custom grid
+  let color;
+
+  for(let y = 0; y < rows; y++){ // y: 0, 1, 2, 3, 4
+
+    // add new aray to the manin aray
+    grid.push([]);
+    for(let x = 0; x < cols; x++){// x: 0, 1, 2, 3, 4, 5
+      //adding numbers into the sub aray
+      if(int(random(0,2)) === 1) color = 255;
+      else color = 0;
+      grid[y].push(color);
+    }
+  }
+
+  
+
 }
 
 function setup() {
   createCanvas(cols*tileSize, rows*tileSize);
-  //noStroke();
+  makeGrid(grid);
   textSize(30);
-  noStroke();
+  
 }
 
 function draw() {
   background(200);
   winStatus = winCondition()
   renderGrid(grid, rows, cols, tileSize);
+  slection();
   textSize(30);
   fill(255, 0, 0);
   text(getCurrentX() + ", " +  getCurrentY(), mouseX, mouseY);
-  noStroke();
 
   if(winStatus) win();
   
@@ -61,7 +72,20 @@ function mousePressed(){
         flip(x, y);
       }
       
+      else if(slectType){
+        // For slection type box
+
+        flip(x,y);
+
+        // If they exist flip in square patren
+        if(x+1 <= cols-1) flip(x+1, y);
+        if(y+1 <= rows-1) flip(x, y+1);
+        if(y+1 <= rows-1 && x+1 <= cols-1) flip(x+1, y+1);
+      }
+
       else{
+        // For crows patren
+
         flip(x, y);
 
         // If they exist:
@@ -70,7 +94,7 @@ function mousePressed(){
         if(x+1 <= cols-1) flip(x+1, y);
         if(y-1 >= 0) flip(x, y-1);
         if(y+1 <= rows-1) flip(x, y+1);
-        //if(y >= 0 && y)
+        
       }
       
     }
@@ -79,13 +103,40 @@ function mousePressed(){
 
 function slection(){
   // this function will tell me all boxes effected
+  let x = getCurrentX(); // *tileSize is the location
+  let y = getCurrentY();
+
+  fill(0,255,0, 99);
+  rect(x*tileSize, y *tileSize, tileSize);
+
   if(slectType){
     // Box slection mood
     
+    // If they exist show them
+    if(x+1 <= cols-1) rect((x+1) *tileSize, y*tileSize, tileSize);
+    if(y+1 <= rows-1) rect(x*tileSize, (y+1) *tileSize, tileSize);
+    if(y+1 <= rows-1 && x+1 <= cols-1) rect((x+1) *tileSize, (y+1) *tileSize, tileSize);
+     
   }
+  
+  else if(keyIsDown(SHIFT)){
+    // only the curent postion will be displayed 
+  }
+
   else{
     // Crows slection mood
+    if(x-1 >= 0) rect((x-1) *tileSize, y *tileSize, tileSize);
+    if(x+1 <= cols-1) rect((x+1) *tileSize, y *tileSize, tileSize);
+    if(y-1 >= 0) rect(x *tileSize, (y-1) *tileSize, tileSize);
+    if(y+1 <= rows-1) rect(x *tileSize, (y+1) *tileSize, tileSize);
+  }
+}
 
+function keyPressed(){
+  if(key === ' '){
+    //Changing slection type based on the space bar being pressed
+    if(slectType) slectType = 0;
+    else slectType = 1;
   }
 }
 
@@ -141,7 +192,7 @@ function winCondition(){
 
 function win(){
   strokeWeight(3);
-  fill(255,0,0);
+  fill(0,255,0);
   text("You have won", width/2, height/2);
   noStroke();
 }

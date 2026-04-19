@@ -1,4 +1,4 @@
-// 2D aray basics
+// Puzzle Game 
 // Muhammad Ismail
 // 4/15/2026
 

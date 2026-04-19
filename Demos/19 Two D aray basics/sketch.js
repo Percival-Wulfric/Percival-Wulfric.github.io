@@ -45,11 +45,12 @@ function draw() {
   background(200);
   winStatus = winCondition()
   renderGrid(grid, rows, cols, tileSize);
-  slection();
-  textSize(30);
-  fill(255, 0, 0);
-  text(getCurrentX() + ", " +  getCurrentY(), mouseX, mouseY);
-
+  if(!winStatus){
+    slection();
+    textSize(30);
+    fill(255, 0, 0);
+    text(getCurrentX() + ", " +  getCurrentY(), mouseX, mouseY);
+  }
   if(winStatus) win();
   
 }
@@ -109,7 +110,12 @@ function slection(){
   fill(0,255,0, 99);
   rect(x*tileSize, y *tileSize, tileSize);
 
-  if(slectType){
+
+  if(keyIsDown(SHIFT)){
+    // only the curent postion will be displayed 
+  }
+
+  else if(slectType){
     // Box slection mood
     
     // If they exist show them
@@ -119,9 +125,7 @@ function slection(){
      
   }
   
-  else if(keyIsDown(SHIFT)){
-    // only the curent postion will be displayed 
-  }
+
 
   else{
     // Crows slection mood
@@ -170,29 +174,47 @@ function getCurrentY(){
 }
 
 function winCondition(){
-  let previous;
-  let current;
-  let count = 0;
-  for(let y = 0; y < rows; y++){ // y: 0, 1, 2, 3, 4
-    for(let x = 0; x < cols; x++){// x: 0, 1, 2, 3, 4, 5
-      if(x > 0){
-        previous = current;
-        current = grid[y][x];
+  // This function checks if the cells are the same color
 
-        if(current === previous) count ++;
+
+  // This has a bug where if the rows are the same it give a win
+  // so if row 1 was all black and row 2 was all white it woud be win 
+  // let previous;
+  // let current;
+  // let count = 0;
+  // for(let y = 0; y < rows; y++){ // y: 0, 1, 2, 3, 4
+  //   for(let x = 0; x < cols; x++){// x: 0, 1, 2, 3, 4, 5
+  //     if(x > 0){
+  //       previous = current;
+  //       current = grid[y][x];
+
+  //       if(current === previous) count ++;
+  //     }
+  //     else current = grid[y][x];
+
+  //   }
+  // }
+  // if(count < rows * (cols-1)) return false;
+  // return true;
+
+  let first = grid[0][0];
+
+  for(let y = 0; y < rows; y++){
+    for(let x = 0; x < cols; x++){
+      //compares each cell to the first one
+      if(grid[y][x] !== first){
+        return false;
       }
-      else current = grid[y][x];
-
     }
   }
-
-  if(count < rows * (cols-1)) return false;
   return true;
+
+  
 }
 
 function win(){
   strokeWeight(3);
   fill(0,255,0);
-  text("You have won", width/2, height/2);
+  text("You won", width/2, height/2);
   noStroke();
 }

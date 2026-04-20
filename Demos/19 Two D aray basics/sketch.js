@@ -215,6 +215,7 @@ function winCondition(){
 function win(){
   strokeWeight(3);
   fill(0,255,0);
+  textAlign(CENTER, CENTER);
   text("You won", width/2, height/2);
   noStroke();
 }

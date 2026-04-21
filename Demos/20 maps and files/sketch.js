@@ -15,6 +15,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noLoop();
+  noStroke();
 
   // Construct the Map of Colors
   colorMap = new Map([
@@ -39,7 +40,7 @@ function draw() {
 
 function drawImg(){
   // reaad thru are text info and consturuct an image
-  let pixelSize = 50;
+  let pixelSize = 56;
   for(let y = 0; y < rows; y++){
     let currentRow = imgFile[y];
     for(let x = 0; x < cols; x++){

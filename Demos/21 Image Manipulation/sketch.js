@@ -7,6 +7,7 @@
 
 // Globale Varables
 let myImage;
+let myVideo;
 
 function preload(){
   // called BEFOR SETUP. Won't conclude.
@@ -15,19 +16,50 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(myImage.width, myImage.height);
+  //createCanvas(myImage.width, myImage.height);
+  createCanvas(640,480);
+  myVideo = createCapture(VIDEO);
   pixelDensity(1); // keeps imgs unform look
+  //myVideo.hide();
 }
 
 function draw() {
   background(220);
-  image(myImage, 0,0);
+  //image(myImage, 0,0);  //STILL IMAGE
+  image(myVideo,0,0);
 
   // access and modify the pixels on the Canvas
   loadPixels(); //dumps data from canvas into array
+  background(0);
+
   //boost();
-  grayscale();
+  //grayscale();
+  //updatePixels();
+  textImage();
+  loadPixels();
+  //boost();
   updatePixels();
+
+}
+
+function textImage(){
+  let scaleAmount = 3; 
+  textSize(scaleAmount);
+  fill(255);
+
+  for(let x = 0; x<width; x+= scaleAmount){
+    for(let y = 0; y < height; y += scaleAmount){
+      let index = ((y*width) +x) *4;
+      fill(pixels[index], pixels[index+1], pixels[index+2], 50);
+      let avg = getAvg(x,y); //0-255
+      if(avg> 210) text("%",x,y);
+      else if(avg>170) text("T",x,y);
+      else if(avg>130) text("x",x,y);
+      else if(avg>90) text(":",x,y);
+      else if(avg>45) text(".",x,y);
+    }
+  }
+
 }
 
 function boost(){

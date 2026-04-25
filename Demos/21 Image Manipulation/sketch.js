@@ -43,7 +43,7 @@ function draw() {
 }
 
 function textImage(){
-  let scaleAmount = 3; 
+  let scaleAmount = 5; 
   textSize(scaleAmount);
   fill(255);
 

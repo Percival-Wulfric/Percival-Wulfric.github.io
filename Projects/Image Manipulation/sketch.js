@@ -8,32 +8,81 @@
 // Globale Varables
 let myImage;
 let myVideo;
+let videoOn = 1; // 0 = off, 1 = on
+let filter = 0; // 0 to 5 for each efect
+let numFilter = 5;
 
 function preload(){
   // called BEFOR SETUP. Won't conclude.
   // Until all loads are complete.
-  myImage = loadImage("assets/nuit.jpg"); //chip.png
+  myImage = loadImage("assets/hand.jpg"); //chip.png
 }
 
 function setup() {
-  createCanvas(myImage.width, myImage.height);
-  //createCanvas(640,480);
+  //createCanvas(myImage.width, myImage.height);
+  if(videoOn){
+    createCanvas(640,480);
+    myVideo = createCapture(VIDEO);
+    //myVideo.hide();
+  }
+  
   pixelDensity(1); // keeps imgs unform look
-  noLoop();
+
   
 }
 
 function draw() {
-  background(255);
-  image(myImage, 0,0);  //STILL IMAGE
+  background(0);
+
+  if(videoOn) image(myVideo, 0,0);  //Video
+  else image(myImage, 0,0);  //STILL IMAGE
 
   // access and modify the pixels on the Canvas
   loadPixels(); //dumps data from canvas into array
-  //majorityColor();
-  //gOutRight();
-  fiveColorPosterize();
+
+  if(filter === 0) grayscale();
+  else if(filter === 1)textImage();
+  else if(filter === 2) majorityColor();
+  else if(filter === 3) gOutRight();
+  else if(filter === 4) fiveColorPosterize();
+  else if(filter === 5) horizontalMirror();
+
   updatePixels();
   
+}
+
+function keyPressed(){
+  // If the key is pressed (p5 og)
+
+  if(key === " "){
+    filter++;
+    if(filter > numFilter) filter = 0;
+  }
+
+  if(key === "v"){
+    videoOn++;
+    if(videoOn > 1) videoOn = 0;
+  }
+}
+
+function textImage(){
+  let scaleAmount = 3; 
+  textSize(scaleAmount);
+  fill(255);
+
+  for(let x = 0; x<width; x+= scaleAmount){
+    for(let y = 0; y < height; y += scaleAmount){
+      let index = ((y*width) +x) *4;
+      //fill(pixels[index], pixels[index+1], pixels[index+2], 50);
+      let avg = getAvg(x,y); //0-255
+      if(avg> 210) text("%",x,y);
+      else if(avg>170) text("T",x,y);
+      else if(avg>130) text("x",x,y);
+      else if(avg>90) text(":",x,y);
+      else if(avg>45) text(".",x,y);
+    }
+  }
+
 }
 
 function majorityColor(){
@@ -59,6 +108,16 @@ function majorityColor(){
     stePixelOneD(i,r,g,b);
   }
 } 
+
+function getAvg(x,y){
+  // returns the avridge intensitey of rgb
+  // at (x,y).
+  let index = ((y*width) +x) *4;
+  let r = pixels[index];
+  let g = pixels[index+1];
+  let b = pixels[index+2];
+  return (r+g+b) /3;
+}
 
 function gOutRight(){
 
@@ -102,7 +161,7 @@ function fiveColorPosterize(){
 }
 
 function horizontalMirror(){
-  let rightSide = [];
+  // This function will miror the img on the right to the left
   for(let x = 0; x < width; x++){
     for(let y = 0; y < height; y++){
       if(x > width/2){
@@ -110,8 +169,9 @@ function horizontalMirror(){
         let r = pixels[i];
         let g = pixels[i+1];
         let b = pixels[i+2];
-        let a = pixels[i+3];
-        rightSide.push(r,g,b,a);
+
+        stePixel(width - x,y,r, g,b);
+        
       }
     }
   }

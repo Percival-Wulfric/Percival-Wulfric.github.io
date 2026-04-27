@@ -8,7 +8,7 @@
 // Globale Varables
 let myImage;
 let myVideo;
-let videoOn = 1; // 0 = off, 1 = on
+let videoOn = 0; // 0 = off, 1 = on
 let filter = 0; // 0 to 5 for each efect
 let numFilter = 5;
 
@@ -19,12 +19,13 @@ function preload(){
 }
 
 function setup() {
-  //createCanvas(myImage.width, myImage.height);
+  
   if(videoOn){
     createCanvas(640,480);
     myVideo = createCapture(VIDEO);
     //myVideo.hide();
   }
+  else createCanvas(myImage.width, myImage.height);
   
   pixelDensity(1); // keeps imgs unform look
 

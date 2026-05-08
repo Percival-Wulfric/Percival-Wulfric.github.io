@@ -4,7 +4,6 @@
 
 // Globale
 let player1;
-const GRAVITY = 0.1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -16,17 +15,52 @@ function draw() {
   player1.action();
 }
 
+function startMenu(){
+  // For the start menue
+}
+
+function pauseMenu(){
+  // For the pause menu
+}
+
+function endScreen(){
+  // The end screen for who won
+}
+
+function timer(){
+  // This function is to make the timer
+}
+
+function powerUps(){
+  // This function handles overups
+}
+
+function tag(){
+  // The player tag logic
+}
+
+function playerColistions(){
+  // To handle any player colistions
+}
+
+function platforms(){
+  // This function handless all platfor related things
+  // Player intractions with platform
+  // platform hit boxes
+
+
+}
+
 class player{
   constructor(x,y,mood, playerNumber){
-    this.pos = createVector(x,y);
-    this.vel = createVector(0,0);
-    this.grav = createVector(0,0.2);
+    this.pos = createVector(x,y); //player position on screen
+    this.vel = createVector(0,0); // current speed and direction
+    this.grav = createVector(0,0.2); // downwords force
     this.mood = mood;
     this.playerNumber = playerNumber;
-    this.speed = 2;
     this.jumpHeight = 3;
-    this.ySpeed = 0;
     this.playerSize = 50;
+    this.isJumping = 0; // 0 = not jumping, 1 = is jumping
   }
 
   movement(){
@@ -39,15 +73,35 @@ class player{
       if(keyIsDown(LEFT_ARROW)){
         this.vel.x = -3;
       }
-      if(keyIsDown(RIGHT_ARROW)){
-
+      else if(keyIsDown(RIGHT_ARROW)){
+        this.vel.x = 3;
       }
       
-      if(keyIsDown(DOWN_ARROW)){
+      else if(keyIsDown(DOWN_ARROW)){
         // If the player has a anilitey to go down they can
 
       }
+
+      else if(keyIsDown(UP_ARROW)){
+        if(!this.isJumping){
+          // If not jumping then jump
+          this.isJumping = 1;
+          this.vel.y = -1;
+        }
+        this.isJumping = 0;
+      }
+
+      else{
+        // Stop movemnet if the player is not hiting any keys
+        this.vel.x = 0;
+      }
     }
+    if(this.pos.y > height -this.playerSize){
+      this.pos.y = height -this.playerSize;
+      this.vel.y = 0;
+    }
+
+    
   }
 
   jump(){

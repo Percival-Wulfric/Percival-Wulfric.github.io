@@ -58,9 +58,10 @@ class player{
     this.grav = createVector(0,0.2); // downwords force
     this.mood = mood;
     this.playerNumber = playerNumber;
-    this.jumpHeight = 3;
+    this.jumpHeight = 10; // This value is the first value that worked
     this.playerSize = 50;
-    this.isJumping = 0; // 0 = not jumping, 1 = is jumping
+    this.isJumping = 1; // 0 = last frame jump presed, 1 = last frame jump was not preesed
+    this.numJumps = 2; // number of jumps the charcter is alowed to perform
   }
 
   movement(){
@@ -68,38 +69,40 @@ class player{
     this.vel.add(this.grav);
     this.pos.add(this.vel);
 
-
     if(this.playerNumber === 1){
       if(keyIsDown(LEFT_ARROW)){
         this.vel.x = -3;
       }
-      else if(keyIsDown(RIGHT_ARROW)){
+      if(keyIsDown(RIGHT_ARROW)){
         this.vel.x = 3;
       }
       
-      else if(keyIsDown(DOWN_ARROW)){
+      if(keyIsDown(DOWN_ARROW)){
         // If the player has a anilitey to go down they can
 
       }
 
-      else if(keyIsDown(UP_ARROW)){
-        if(!this.isJumping){
-          // If not jumping then jump
-          this.isJumping = 1;
-          this.vel.y = -1;
+      if(keyIsDown(UP_ARROW)){
+        if(this.numJumps > 0 && !this.isJumping){
+          this.vel.y = -this.jumpHeight;
+          this.numJumps -= 1;
         }
-        this.isJumping = 0;
       }
 
-      else{
+      if(!(keyIsDown(RIGHT_ARROW) || keyIsDown(LEFT_ARROW) || keyIsDown(UP_ARROW) || keyIsDown(DOWN_ARROW))){
         // Stop movemnet if the player is not hiting any keys
         this.vel.x = 0;
       }
+      this.isJumping = keyIsDown(UP_ARROW);
+      //print(this.isJumping);
     }
-    if(this.pos.y > height -this.playerSize){
+    if((this.pos.y > height -this.playerSize) && this.vel.y > 0){ 
+      // the and condition makes shure I am actuly falling to alow me to also jump
       this.pos.y = height -this.playerSize;
       this.vel.y = 0;
+      this.numJumps = 2;
     }
+
 
     
   }

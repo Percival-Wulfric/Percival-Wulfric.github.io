@@ -4,6 +4,16 @@
 
 // Globale
 let player1, player2;
+let map = [];
+let players = [];
+
+function preload(){
+  // called BEFORE SETUP. Won't conclude.
+  // Until all loads are complete.
+  let temp1 = loadImage("assets/Map-0/player1");
+  let temp2 = loadImage("assets/Map-0/player2");  
+  players.push(temp1, temp2);
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -19,7 +29,7 @@ function draw() {
 }
 
 function startMenu(){
-  // For the start menue
+  // For the start menu
 }
 
 function pauseMenu(){
@@ -43,11 +53,11 @@ function tag(){
 }
 
 function playerColistions(){
-  // To handle any player colistions
+  // To handle any player collisions
 }
 
 function platforms(){
-  // This function handless all platfor related things
+  // This function handless all platform related things
   // Player intractions with platform
   // platform hit boxes
 
@@ -143,14 +153,14 @@ class player{
 
   jump(){
     if(keyIsDown(UP_ARROW)){
-      // - is up becous 0 to height
+      // - is up because 0 to height
       this.y -= this.jumpHeight;
       if(this.y > height) this.y = height;
     }
   }
 
   gravity(){
-    // This function gives the player gravitey
+    // This function gives the player gravity
     //acceleration down
     this.ySpeed += GRAVITY;
     this.y = this.y + this.ySpeed;
@@ -165,8 +175,13 @@ class player{
   
 
   show(){
-    // this function will display the charcter
-    fill(this.color[0],this.color[1],this.color[2]);
+    // this function will display the character
+    if(this.playerNumber === 1){
+      
+    }
+    else if(this.playerNumber === 2){
+
+    }
     rect(this.pos.x,this.pos.y, this.playerSize,this.playerSize);
   }
 

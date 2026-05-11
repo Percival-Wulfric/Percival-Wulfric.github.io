@@ -3,16 +3,19 @@
 // May 4/26
 
 // Globale
-let player1;
+let player1, player2;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  player1 = new player(width/2, height/2, 0, 1);
+  noStroke();
+  player1 = new player(width/3, height/2, 0, 1, [255,0,0]);
+  player2 = new player(width/2, height/2, 0, 2, [0,0,255]);
 }
 
 function draw() {
   background(220);
   player1.action();
+  player2.action();
 }
 
 function startMenu(){
@@ -52,16 +55,17 @@ function platforms(){
 }
 
 class player{
-  constructor(x,y,mood, playerNumber){
+  constructor(x,y,mood, playerNumber, color){
     this.pos = createVector(x,y); //player position on screen
     this.vel = createVector(0,0); // current speed and direction
-    this.grav = createVector(0,0.2); // downwords force
+    this.grav = createVector(0,0.50); // downwords force
     this.mood = mood;
     this.playerNumber = playerNumber;
     this.jumpHeight = 10; // This value is the first value that worked
     this.playerSize = 50;
     this.isJumping = 1; // 0 = last frame jump presed, 1 = last frame jump was not preesed
     this.numJumps = 2; // number of jumps the charcter is alowed to perform
+    this.color = color;
   }
 
   movement(){
@@ -71,10 +75,10 @@ class player{
 
     if(this.playerNumber === 1){
       if(keyIsDown(LEFT_ARROW)){
-        this.vel.x = -3;
+        this.vel.x = -6;
       }
       if(keyIsDown(RIGHT_ARROW)){
-        this.vel.x = 3;
+        this.vel.x = 6;
       }
       
       if(keyIsDown(DOWN_ARROW)){
@@ -96,6 +100,36 @@ class player{
       this.isJumping = keyIsDown(UP_ARROW);
       //print(this.isJumping);
     }
+
+    if(this.playerNumber === 2){
+      if(keyIsDown(65)){
+        this.vel.x = -6;
+      }
+      if(keyIsDown(68)){
+        this.vel.x = 6;
+      }
+      
+      if(keyIsDown(83)){
+        // If the player has a anilitey to go down they can
+
+      }
+
+      if(keyIsDown(87)){
+        if(this.numJumps > 0 && !this.isJumping){
+          this.vel.y = -this.jumpHeight;
+          this.numJumps -= 1;
+        }
+      }
+
+      if(!(keyIsDown(87) || keyIsDown(83) || keyIsDown(68) || keyIsDown(65))){
+        // Stop movemnet if the player is not hiting any keys
+        this.vel.x = 0;
+      }
+      this.isJumping = keyIsDown(87);
+      //print(this.isJumping);
+    }
+
+
     if((this.pos.y > height -this.playerSize) && this.vel.y > 0){ 
       // the and condition makes shure I am actuly falling to alow me to also jump
       this.pos.y = height -this.playerSize;
@@ -132,6 +166,7 @@ class player{
 
   show(){
     // this function will display the charcter
+    fill(this.color[0],this.color[1],this.color[2]);
     rect(this.pos.x,this.pos.y, this.playerSize,this.playerSize);
   }
 
